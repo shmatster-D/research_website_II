@@ -1,0 +1,8 @@
+[
+  { "type": "photo", "title": "Conference talk — SysConf 2025", "color": "3d5af1" },
+  { "type": "video", "title": "Lab walkthrough", "color": "e0742f", "video": null },
+  { "type": "photo", "title": "Whiteboard session", "color": "24252c" },
+  { "type": "photo", "title": "Fieldwork, coastal range", "color": "5b3fa0" },
+  { "type": "video", "title": "Conference poster pitch", "color": "3d5af1", "video": null },
+  { "type": "photo", "title": "Lab group, spring 2025", "color": "e0742f" }
+]

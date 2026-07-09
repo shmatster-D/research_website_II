@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Adaptive Caching for Edge Inference",
+    "status": "Active",
+    "period": "2024 – present",
+    "file": "research/adaptive-caching.md"
+  },
+  {
+    "title": "Typed Effect Systems for Concurrent Programs",
+    "status": "Active",
+    "period": "2023 – present",
+    "file": "research/typed-effects.md"
+  },
+  {
+    "title": "Crowd-Sourced Dataset for Low-Resource Translation",
+    "status": "Completed, 2023",
+    "period": "2021 – 2023",
+    "file": "research/translation-dataset.md"
+  }
+]

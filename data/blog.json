@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Why I stopped trusting my benchmarks",
+    "date": "2026-05-12",
+    "excerpt": "A small methodology bug cost me three weeks and taught me to distrust any result that arrives too quickly.",
+    "file": "blog/benchmarks.md"
+  },
+  {
+    "title": "Notes from a workshop on reproducibility",
+    "date": "2026-03-02",
+    "excerpt": "A short writeup from a workshop on getting research artifacts to actually run on someone else's machine.",
+    "file": "blog/reproducibility-workshop.md"
+  },
+  {
+    "title": "Starting a postdoc",
+    "date": "2026-01-08",
+    "excerpt": "First week notes from joining the Systems Lab at Linden, and what I'm hoping to spend the next two years on.",
+    "file": "blog/starting-postdoc.md"
+  }
+]
