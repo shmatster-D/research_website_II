@@ -508,6 +508,27 @@
       fragColor = vec4(clamp(base + splat, -4.0, 4.0), 1.0);
     }`;
 
+  var radialForceShader = `#version 300 es
+    precision highp float; precision highp sampler2D;
+    in vec2 vUv;
+    out vec4 fragColor;
+    uniform sampler2D uTarget;
+    uniform float aspectRatio;
+    uniform vec2 point;
+    uniform float radius;
+    uniform float strength;
+    void main () {
+      vec2 p = vUv - point;
+      vec2 pCorrected = p;
+      pCorrected.x *= aspectRatio;
+      float dist = length(pCorrected);
+      vec2 dir = p / (length(p) + 1e-5);
+      float falloff = exp(-dist * dist / radius);
+      vec2 force = dir * strength * falloff;
+      vec2 base = texture(uTarget, vUv).xy;
+      fragColor = vec4(clamp(base + force, -1.2, 1.2), 0.0, 1.0);
+    }`;
+
   var displayShader = `#version 300 es
     precision highp float; precision mediump sampler2D;
     in vec2 vUv;
@@ -527,6 +548,7 @@
   var gradientSubtractProgram = createProgram(baseVertexShader, gradientSubtractShader);
   var buoyancyProgram = createProgram(baseVertexShader, buoyancyShader);
   var splatProgram = createProgram(baseVertexShader, splatShader);
+  var radialForceProgram = createProgram(baseVertexShader, radialForceShader);
   var displayProgram = createProgram(baseVertexShader, displayShader);
 
   // ---- framebuffers ----
@@ -540,14 +562,14 @@
 
   var simTexelSize = { x: 1 / simRes.width, y: 1 / simRes.height };
 
-  function splatVelocity(x, y, dx, dy){
+  function splatVelocity(x, y, dx, dy, radius){
     gl.viewport(0, 0, velocity.width, velocity.height);
     splatProgram.bind();
     gl.uniform1i(splatProgram.uniforms.uTarget, velocity.read.attach(0));
     gl.uniform1f(splatProgram.uniforms.aspectRatio, canvas.width / canvas.height);
     gl.uniform2f(splatProgram.uniforms.point, x, y);
     gl.uniform3f(splatProgram.uniforms.color, dx, dy, 0.0);
-    gl.uniform1f(splatProgram.uniforms.radius, VELOCITY_SPLAT_RADIUS);
+    gl.uniform1f(splatProgram.uniforms.radius, radius || VELOCITY_SPLAT_RADIUS);
     blit(velocity.write);
     velocity.swap();
   }
@@ -567,6 +589,23 @@
   function splat(x, y, dx, dy, color, dyeRadius){
     splatVelocity(x, y, dx, dy);
     splatDye(x, y, color, dyeRadius);
+  }
+
+  // A click on the background sends a radial shockwave of velocity outward
+  // from the click point (pushing any nearby smoke away), plus a small
+  // burst of dye so the "puff" is visible even where there's no smoke yet.
+  function puff(x, y){
+    gl.viewport(0, 0, velocity.width, velocity.height);
+    radialForceProgram.bind();
+    gl.uniform1i(radialForceProgram.uniforms.uTarget, velocity.read.attach(0));
+    gl.uniform1f(radialForceProgram.uniforms.aspectRatio, canvas.width / canvas.height);
+    gl.uniform2f(radialForceProgram.uniforms.point, x, y);
+    gl.uniform1f(radialForceProgram.uniforms.radius, 0.0005);
+    gl.uniform1f(radialForceProgram.uniforms.strength, 100.1);
+    blit(velocity.write);
+    velocity.swap();
+
+    splatDye(x, y, violetColor(0.8), 0.0005);
   }
 
   function violetColor(scale){
@@ -713,6 +752,43 @@
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+
+  // ---- Cursor interaction: moving over the background stirs the dye ----
+  var pointer = { x: null, y: null };
+
+  function clientToUV(clientX, clientY){
+    return { x: clientX / window.innerWidth, y: 1 - clientY / window.innerHeight };
+  }
+
+  function isOverForeground(target){
+    return !!(target && target.closest && target.closest('.profile-header, .tabs, .panel-wrap, .site-footer, .lightbox'));
+  }
+
+  function stir(uv, dx, dy){
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 0.0005) return;
+    var strength = 9;
+    var vx = Math.max(-1.4, Math.min(1.4, dx * strength));
+    var vy = Math.max(-1.4, Math.min(1.4, dy * strength));
+    splatVelocity(uv.x, uv.y, vx, vy, 0.0005);
+  }
+
+  document.addEventListener('pointermove', function(e){
+    if (isOverForeground(e.target)){ pointer.x = null; pointer.y = null; return; }
+    var uv = clientToUV(e.clientX, e.clientY);
+    if (pointer.x !== null) stir(uv, uv.x - pointer.x, uv.y - pointer.y);
+    pointer.x = uv.x; pointer.y = uv.y;
+  });
+
+  function resetPointer(){ pointer.x = null; pointer.y = null; }
+  document.addEventListener('pointerleave', resetPointer);
+  window.addEventListener('blur', resetPointer);
+
+  document.addEventListener('click', function(e){
+    if (isOverForeground(e.target)) return;
+    var uv = clientToUV(e.clientX, e.clientY);
+    puff(uv.x, uv.y);
+  });
 })();
 </script>
 
