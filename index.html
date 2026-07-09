@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dante Lamenza Naylor — Research &amp; Notes</title>
+<meta name="description" content="Personal academic site: about, research, gallery, and blog.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ---------- Tokens ---------- */
+  :root{
+    --ink:#1c2b33;
+    --ink-70:rgba(28,43,51,.7);
+    --paper:#eeede2;
+    --panel:#fbfaf4;
+    --line:rgba(28,43,51,.14);
+    --line-strong:rgba(28,43,51,.32);
+    --teal:#2f6f6b;
+    --teal-deep:#1f4d49;
+    --clay:#c1652f;
+    --muted:#5b6058;
+    --shadow:0 10px 28px rgba(28,43,51,.10);
+    --font-display:'Fraunces', serif;
+    --font-body:'Source Sans 3', system-ui, -apple-system, sans-serif;
+    --font-mono:'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  /* ---------- Reset ---------- */
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{ font:inherit; }
+  a{ color:inherit; }
+  img{ max-width:100%; }
+  :focus-visible{ outline:2px solid var(--clay); outline-offset:2px; }
+
+  .page{ max-width:880px; margin:0 auto; padding:48px 24px 90px; }
+
+  /* ---------- Header ---------- */
+  .profile-header{
+    display:flex;
+    gap:28px;
+    align-items:flex-start;
+    padding:28px 28px 36px;
+    margin-bottom:8px;
+    /* background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px); */
+    background-size:26px 26px;
+    background-position:center top;
+  }
+  .avatar{
+    width:128px; height:128px; flex-shrink:0;
+    border-radius:50%;
+    border:2px solid var(--ink);
+    background:linear-gradient(135deg, var(--teal), var(--teal-deep));
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display);
+    font-size:40px; font-weight:600;
+    overflow:hidden;
+  }
+  .avatar img{ width:100%; height:100%; object-fit:cover; }
+  .identity{ flex:1; min-width:220px; }
+  .name{ font-family:var(--font-display); font-size:32px; font-weight:600; margin:2px 0 4px; }
+  .role{ color:var(--muted); font-size:15px; margin:0 0 18px; }
+  .contact-list{ display:flex; flex-direction:column; gap:7px; }
+  .contact-row{ display:flex; gap:12px; align-items:baseline; font-size:14px; }
+  .contact-label{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--teal-deep); width:62px; flex-shrink:0;
+  }
+  .contact-value a{ text-decoration:none; border-bottom:1px solid transparent; }
+  .contact-value a:hover{ border-bottom-color:var(--teal-deep); color:var(--teal-deep); }
+
+  .link-tiles{ display:flex; gap:12px; flex-shrink:0; }
+  .link-tile{
+    width:84px; height:84px;
+    border:1.5px solid var(--ink);
+    background:var(--panel);
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:6px;
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:.03em;
+    text-transform:uppercase; text-decoration:none; color:var(--ink);
+    transition:transform .15s ease, background-color .15s ease, color .15s ease, box-shadow .15s ease;
+  }
+  .link-tile:hover{ background:var(--teal); border-color:var(--teal); color:#fff; transform:translateY(-2px); box-shadow:var(--shadow); }
+
+  @media (max-width:640px){
+    .profile-header{ flex-direction:column; align-items:center; text-align:center; }
+    .identity{ display:flex; flex-direction:column; align-items:center; }
+    .contact-row{ justify-content:center; }
+    .link-tiles{ align-self:center; }
+  }
+
+  /* ---------- Tabs ---------- */
+  .tabs{ display:flex; gap:6px; margin:0; padding:0 0 0 2px; list-style:none; overflow-x:auto; overflow-y:hidden; }
+  .tab-btn{
+    font-family:var(--font-display); font-size:16px; font-weight:600;
+    padding:11px 22px; border:1.0px solid var(--ink); border-radius:5px 5px 0 0;
+    background:var(--paper); color:var(--ink-70); cursor:pointer; white-space:nowrap;
+    position:relative; transform:translateY(2px);
+    transition:transform .15s ease, background-color .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .tab-btn:hover{ color:var(--ink); background:#fff; }
+  .tab-btn[aria-selected="true"]{
+    background:var(--panel); color:var(--ink); border-bottom-color:var(--panel);
+    transform:translateY(0); z-index:3; box-shadow:inset 0 3px 0 var(--clay);
+  }
+
+  /* ---------- Panel ---------- */
+  .panel-wrap{ border:1.5px solid var(--ink); background:var(--panel); padding:40px; position:relative; z-index:1; }
+  .panel[hidden]{ display:none; }
+  .panel h2{ font-family:var(--font-display); font-size:26px; margin:0 0 16px; }
+  .panel h3{ font-family:var(--font-display); font-size:20px; margin:28px 0 10px; }
+  .panel h4{ font-family:var(--font-display); font-size:17px; margin:20px 0 8px; }
+  .panel p{ margin:0 0 16px; }
+  .panel ul{ margin:0 0 16px 20px; padding:0; }
+  .panel li{ margin-bottom:6px; }
+  .panel img{ border:1.5px solid var(--ink); margin:10px 0 18px; display:block; }
+  .panel a{ color:var(--teal-deep); text-decoration-color:rgba(47,111,107,.4); }
+  .panel a:hover{ text-decoration-color:var(--teal-deep); }
+  .panel code{ font-family:var(--font-mono); background:rgba(28,43,51,.07); padding:2px 5px; border-radius:3px; font-size:.9em; }
+  .panel-intro{ color:var(--muted); font-size:15px; margin-bottom:26px; padding-bottom:20px; border-bottom:1px dashed var(--line-strong); }
+
+  /* ---------- Research accordion ---------- */
+  .project{ border:1.5px solid var(--ink); margin-bottom:14px; background:#fff; }
+  .project-toggle{
+    width:100%; display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+    padding:16px 20px; background:none; border:none; cursor:pointer; text-align:left;
+  }
+  .project-title{ font-family:var(--font-display); font-size:17px; font-weight:600; }
+  .project-meta{ display:block; margin-top:5px; font-family:var(--font-mono); font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:var(--teal-deep); font-weight:500; }
+  .project-indicator{ font-family:var(--font-mono); font-size:22px; line-height:1; color:var(--clay); flex-shrink:0; width:18px; text-align:center; }
+  .project-body{ padding:2px 20px 20px; border-top:1px dashed var(--line-strong); }
+  .project-body[hidden]{ display:none; }
+
+  /* ---------- Gallery ---------- */
+  .gallery-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:14px; }
+  .gallery-item{
+    border:1.5px solid var(--ink); cursor:pointer; padding:0; background:none;
+    aspect-ratio:1/1; overflow:hidden; position:relative; display:block; width:100%;
+  }
+  .gallery-item img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .2s ease; }
+  .gallery-item:hover img{ transform:scale(1.05); }
+  .gallery-caption{
+    position:absolute; left:0; right:0; bottom:0; padding:9px 10px;
+    background:linear-gradient(to top, rgba(28,43,51,.88), transparent);
+    color:#fff; font-family:var(--font-mono); font-size:11px; text-align:left;
+  }
+  .gallery-badge{
+    position:absolute; top:8px; right:8px; background:var(--clay); color:#fff;
+    font-family:var(--font-mono); font-size:9.5px; padding:2px 6px;
+    text-transform:uppercase; letter-spacing:.05em;
+  }
+
+  /* ---------- Lightbox ---------- */
+  .lightbox{ position:fixed; inset:0; background:rgba(28,43,51,.92); display:flex; align-items:center; justify-content:center; padding:32px; z-index:50; }
+  .lightbox[hidden]{ display:none; }
+  .lightbox-content{ max-width:820px; width:100%; max-height:86vh; background:var(--panel); border:1.5px solid var(--ink); padding:22px; position:relative; overflow-y:auto; }
+  .lightbox-content img, .lightbox-content video{ width:100%; max-height:62vh; object-fit:contain; display:block; border:1px solid var(--line-strong); background:#000; }
+  .lightbox-caption{ margin-top:14px; font-family:var(--font-mono); font-size:13px; color:var(--muted); }
+  .lightbox-note{ margin-top:8px; font-size:12.5px; color:var(--muted); font-style:italic; }
+  .lightbox-close{
+    position:absolute; top:-16px; right:-16px; width:36px; height:36px; border-radius:50%;
+    background:var(--ink); color:#fff; border:none; font-size:18px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-close:hover{ background:var(--clay); }
+
+  /* ---------- Blog ---------- */
+  .post-list{ display:flex; flex-direction:column; gap:22px; }
+  .post-summary{ border-bottom:1px dashed var(--line-strong); padding-bottom:20px; }
+  .post-date{ font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--teal-deep); }
+  .post-title-btn{
+    display:block; background:none; border:none; padding:6px 0 8px; text-align:left; cursor:pointer;
+    font-family:var(--font-display); font-size:21px; font-weight:600; color:var(--ink);
+  }
+  .post-title-btn:hover{ color:var(--teal-deep); text-decoration:underline; }
+  .post-excerpt{ color:var(--muted); margin:0; }
+  .back-link{
+    font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--teal-deep); background:none; border:none; cursor:pointer; padding:0;
+    margin-bottom:22px; display:inline-flex; gap:6px; align-items:center;
+  }
+  .back-link:hover{ text-decoration:underline; }
+  .post-full .post-date{ display:block; margin-bottom:6px; }
+
+  /* ---------- Footer ---------- */
+  .site-footer{ margin-top:40px; text-align:center; font-family:var(--font-mono); font-size:11px; color:var(--muted); letter-spacing:.04em; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<noscript>This site uses JavaScript to power its tabs, project details, gallery, and blog. Please enable JavaScript to see the full content.</noscript>
+
+<div class="page">
+
+  <header class="profile-header">
+    <div class="avatar" aria-hidden="true"><img src="myphoto.jpg" alt="DLN"></div>
+    <div class="identity">
+      <h1 class="name">Dante Lamenza Naylor</h1>
+      <p class="role"> PhD student · Department of Physics, Brown University</p>
+      <div class="contact-list">
+        <div class="contact-row">
+          <span class="contact-label">Email</span>
+          <span class="contact-value"><a href="mailto:dante_lamenza_naylor@brown.edu">dante_lamenza_naylor@brown.edu</a></span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">Phone</span>
+          <span class="contact-value"><a href="tel:+19782010493">+1 (978) 201-0493</a></span>
+        </div>
+        <div class="contact-row">
+          <span class="contact-label">Office</span>
+          <span class="contact-value">Dept. of Physics, Brown University, 184 Hope St, Providence, RI 02912</span>
+        </div>
+      </div>
+    </div>
+    <div class="link-tiles">
+      <a class="link-tile" href="https://www.linkedin.com/in/dante-lamenza-naylor-41027b273/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="link-tile" href="https://physics.brown.edu/" target="_blank" rel="noopener">Uni&nbsp;Web</a>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Site sections">
+    <button class="tab-btn" role="tab" id="tab-about" aria-controls="panel-about" aria-selected="true" data-tab="about">About</button>
+    <button class="tab-btn" role="tab" id="tab-research" aria-controls="panel-research" aria-selected="false" tabindex="-1" data-tab="research">Research</button>
+    <button class="tab-btn" role="tab" id="tab-gallery" aria-controls="panel-gallery" aria-selected="false" tabindex="-1" data-tab="gallery">Gallery</button>
+    <button class="tab-btn" role="tab" id="tab-blog" aria-controls="panel-blog" aria-selected="false" tabindex="-1" data-tab="blog">Blog</button>
+  </nav>
+
+  <main class="panel-wrap">
+    <section class="panel" id="panel-about" role="tabpanel" aria-labelledby="tab-about"></section>
+    <section class="panel" id="panel-research" role="tabpanel" aria-labelledby="tab-research" hidden></section>
+    <section class="panel" id="panel-gallery" role="tabpanel" aria-labelledby="tab-gallery" hidden></section>
+    <section class="panel" id="panel-blog" role="tabpanel" aria-labelledby="tab-blog" hidden></section>
+  </main>
+
+  <footer class="site-footer">Latest update: July 2026</footer>
+</div>
+
+<div class="lightbox" id="lightbox" hidden>
+  <div class="lightbox-content" role="dialog" aria-modal="true" aria-label="Media preview">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close">&times;</button>
+    <div id="lightbox-media"></div>
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------------------------------------------
+     Tiny placeholder-image generator (inline SVG data URI).
+     Replace any of these with real photos/videos — just
+     swap the `src` / `video` fields in the data below.
+  --------------------------------------------------- */
+  function ph(label, color, w, h){
+    w = w || 480; h = h || 320;
+    var safe = String(label).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='" + w + "' height='" + h + "'>" +
+      "<rect width='100%' height='100%' fill='#" + color + "'/>" +
+      "<text x='50%' y='50%' font-family='monospace' font-size='16' fill='#ffffff' " +
+      "text-anchor='middle' dominant-baseline='middle'>" + safe + "</text></svg>";
+    return "data:image/svg+xml," + encodeURIComponent(svg);
+  }
+
+  /* ---------------------------------------------------
+     Minimal markdown renderer — headings, bold/italic,
+     links, images, inline code, and bullet lists.
+     Enough to let any panel below "support rich markdown
+     format" (the brief's words) without an external library.
+  --------------------------------------------------- */
+  function inline(text){
+    text = text.replace(/!\[([^\]]*)\]\(((?:[^()]|\([^()]*\))*)\)/g, '<img src="$2" alt="$1" loading="lazy">');
+    text = text.replace(/\[([^\]]+)\]\(((?:[^()]|\([^()]*\))*)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    return text;
+  }
+
+  function renderMarkdown(md){
+    var lines = md.trim().split('\n');
+    var html = '', para = [], inList = false;
+
+    function flushPara(){
+      if (para.length){ html += '<p>' + inline(para.join(' ')) + '</p>'; para = []; }
+    }
+
+    lines.forEach(function(raw){
+      var line = raw.trim();
+      if (line === ''){
+        flushPara();
+        if (inList){ html += '</ul>'; inList = false; }
+        return;
+      }
+      var h = line.match(/^(#{1,4})\s+(.*)/);
+      if (h){
+        flushPara();
+        if (inList){ html += '</ul>'; inList = false; }
+        var level = Math.min(h[1].length + 1, 4);
+        html += '<h' + level + '>' + inline(h[2]) + '</h' + level + '>';
+        return;
+      }
+      var li = line.match(/^[-*]\s+(.*)/);
+      if (li){
+        flushPara();
+        if (!inList){ html += '<ul>'; inList = true; }
+        html += '<li>' + inline(li[1]) + '</li>';
+        return;
+      }
+      para.push(line);
+    });
+    flushPara();
+    if (inList) html += '</ul>';
+    return html;
+  }
+
+  /* ---------------------------------------------------
+     Content — replace with your own bio, projects,
+     gallery items, and posts.
+  --------------------------------------------------- */
+  var aboutMd =
+"I'm a postdoctoral researcher in the **Department of Computer Science** at Linden University, " +
+"where I work on the systems and tooling that sit underneath modern machine learning infrastructure. " +
+"My research asks a simple question: how much can we shrink the gap between a model that works in a " +
+"notebook and one that survives in production?\n\n" +
+"Before Linden, I completed my PhD at Cascade Institute of Technology, advised by Prof. Dana Whitfield, " +
+"and spent two summers as a research intern building perception stacks for warehouse robots.\n\n" +
+"![Fieldwork in the coastal range, summer 2024](" + ph('Fieldwork — coastal range','2f6f6b',640,360) + ")\n\n" +
+"When I'm not at a terminal, I'm usually [climbing](https://example.com) something — a rock face, a " +
+"mountain, or occasionally just the learning curve of a new instrument. Reach out using the details " +
+"above, or find my code on [GitHub](https://github.com/yourhandle).\n\n" +
+"## Education\n\n" +
+"- **Ph.D., Computer Science** — Cascade Institute of Technology, 2024\n" +
+"- **M.S., Computer Science** — Cascade Institute of Technology, 2020\n" +
+"- **B.S., Mathematics** — Harrowgate College, 2018";
+
+  var projects = [
+    {
+      title: "Adaptive Caching for Edge Inference",
+      status: "Active",
+      period: "2024 – present",
+      md: "Edge devices rarely have enough memory to keep every model layer warm. This project builds a " +
+      "caching layer that predicts which sub-networks a request will need *before* it arrives, using " +
+      "lightweight signals from upstream traffic.\n\n" +
+      "- Cut p99 latency by **38%** on a fleet of 200 simulated edge nodes\n" +
+      "- Built in collaboration with **Priya Natarajan** and **Tomas Berg**\n" +
+      "- Funded by the Linden University Systems Lab seed grant\n\n" +
+      "[Read the preprint →](https://example.com/papers/adaptive-caching)"
+    },
+    {
+      title: "Typed Effect Systems for Concurrent Programs",
+      status: "Active",
+      period: "2023 – present",
+      md: "A small experimental language, **Esker**, tracks side effects in its type system so that data " +
+      "races become *compile-time* errors instead of postmortem incident reports.\n\n" +
+      "- Esker programs compile to plain Go, no runtime required\n" +
+      "- An early case study cut a recurring class of race conditions to zero over six months\n" +
+      "- Code: [github.com/yourhandle/esker](https://github.com/yourhandle/esker)"
+    },
+    {
+      title: "Crowd-Sourced Dataset for Low-Resource Translation",
+      status: "Completed, 2023",
+      period: "2021 – 2023",
+      md: "Working with community translators across four under-resourced language pairs, we assembled " +
+      "and released a dataset of **62,000** aligned sentence pairs, along with the annotation tooling " +
+      "used to build it.\n\n" +
+      "- Dataset and tooling released under a permissive license\n" +
+      "- Presented at a regional NLP workshop in 2023\n" +
+      "- Now maintained by a small volunteer collective"
+    }
+  ];
+
+  var galleryItems = [
+    { type:'photo', title:'Conference talk — SysConf 2025', color:'2f6f6b' },
+    { type:'video', title:'Lab walkthrough', color:'c1652f', video:null },
+    { type:'photo', title:'Whiteboard session', color:'1c2b33' },
+    { type:'photo', title:'Fieldwork, coastal range', color:'5b6058' },
+    { type:'video', title:'Conference poster pitch', color:'2f6f6b', video:null },
+    { type:'photo', title:'Lab group, spring 2025', color:'c1652f' }
+  ];
+
+  var posts = [
+    {
+      title: "Why I stopped trusting my benchmarks",
+      date: "2026-05-12",
+      excerpt: "A small methodology bug cost me three weeks and taught me to distrust any result that arrives too quickly.",
+      md: "Three weeks ago I had a result that looked too good to share: a **40% latency improvement** " +
+      "from a one-line change. It turned out our benchmark harness was reusing a warmed-up cache between runs.\n\n" +
+      "The fix was trivial. The lesson wasn't: any number that arrives without a fight deserves a second " +
+      "look before it goes in a paper.\n\n" +
+      "I've since added a \"does this feel too easy\" checklist to my own review process. So far it has " +
+      "caught two more bugs and one genuinely good result."
+    },
+    {
+      title: "Notes from a workshop on reproducibility",
+      date: "2026-03-02",
+      excerpt: "A short writeup from a workshop on getting research artifacts to actually run on someone else's machine.",
+      md: "Spent two days at a workshop dedicated entirely to the problem of getting code from *one* " +
+      "machine to run on *another* machine. Some recurring themes:\n\n" +
+      "- Containers help, but only if someone keeps the Dockerfile honest\n" +
+      "- A pinned dependency list beats a friendly README every time\n" +
+      "- The most reproducible papers had the smallest, most boring codebases\n\n" +
+      "I came away convinced that reproducibility is mostly a discipline problem, not a tooling problem."
+    },
+    {
+      title: "Starting a postdoc",
+      date: "2026-01-08",
+      excerpt: "First week notes from joining the Systems Lab at Linden, and what I'm hoping to spend the next two years on.",
+      md: "I started at Linden's Systems Lab this week. The plan, loosely: spend the next two years " +
+      "figuring out how much of the \"glue code\" between research models and production systems can be " +
+      "made boring and automatic rather than clever and bespoke.\n\n" +
+      "More notes here as the work progresses."
+    }
+  ];
+
+  /* ---------------------------------------------------
+     Tabs
+  --------------------------------------------------- */
+  var tabButtons = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+  var panels = {
+    about: document.getElementById('panel-about'),
+    research: document.getElementById('panel-research'),
+    gallery: document.getElementById('panel-gallery'),
+    blog: document.getElementById('panel-blog')
+  };
+
+  function selectTab(name){
+    tabButtons.forEach(function(btn){
+      var match = btn.dataset.tab === name;
+      btn.setAttribute('aria-selected', match ? 'true' : 'false');
+      btn.tabIndex = match ? 0 : -1;
+    });
+    Object.keys(panels).forEach(function(key){
+      panels[key].hidden = key !== name;
+    });
+  }
+
+  tabButtons.forEach(function(btn, i){
+    btn.addEventListener('click', function(){ selectTab(btn.dataset.tab); });
+    btn.addEventListener('keydown', function(e){
+      var dir = (e.key === 'ArrowRight') ? 1 : (e.key === 'ArrowLeft') ? -1 : 0;
+      if (!dir) return;
+      e.preventDefault();
+      var next = tabButtons[(i + dir + tabButtons.length) % tabButtons.length];
+      next.focus();
+      selectTab(next.dataset.tab);
+    });
+  });
+
+  /* ---------------------------------------------------
+     About
+  --------------------------------------------------- */
+  panels.about.innerHTML = renderMarkdown(aboutMd);
+
+  /* ---------------------------------------------------
+     Research — accordion, one dropdown per project
+  --------------------------------------------------- */
+  var researchHtml = '<p class="panel-intro">Selected ongoing and completed projects. Select a title to expand details.</p>';
+  projects.forEach(function(p, i){
+    researchHtml +=
+      '<div class="project">' +
+        '<button class="project-toggle" aria-expanded="false" aria-controls="project-body-' + i + '">' +
+          '<span><span class="project-title">' + p.title + '</span>' +
+          '<span class="project-meta">' + p.status + ' · ' + p.period + '</span></span>' +
+          '<span class="project-indicator" aria-hidden="true">+</span>' +
+        '</button>' +
+        '<div class="project-body" id="project-body-' + i + '" hidden></div>' +
+      '</div>';
+  });
+  panels.research.innerHTML = researchHtml;
+
+  panels.research.querySelectorAll('.project-toggle').forEach(function(btn, i){
+    btn.addEventListener('click', function(){
+      var body = document.getElementById('project-body-' + i);
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', open ? 'false' : 'true');
+      btn.querySelector('.project-indicator').textContent = open ? '+' : '\u2013';
+      body.hidden = open;
+      if (!open && !body.dataset.rendered){
+        body.innerHTML = renderMarkdown(projects[i].md);
+        body.dataset.rendered = '1';
+      }
+    });
+  });
+
+  /* ---------------------------------------------------
+     Gallery — tiled grid, opens lightbox on click
+     (photos enlarge, videos play)
+  --------------------------------------------------- */
+  var galleryHtml = '<p class="panel-intro">A tiling of photos and videos — select any tile to enlarge or play it.</p><div class="gallery-grid">';
+  galleryItems.forEach(function(item, i){
+    var thumb = ph(item.title, item.color, 400, 400);
+    galleryHtml +=
+      '<button class="gallery-item" data-index="' + i + '" aria-label="Open ' + item.title + '">' +
+        '<img src="' + thumb + '" alt="' + item.title + '" loading="lazy">' +
+        '<span class="gallery-badge">' + item.type + '</span>' +
+        '<span class="gallery-caption">' + item.title + '</span>' +
+      '</button>';
+  });
+  galleryHtml += '</div>';
+  panels.gallery.innerHTML = galleryHtml;
+
+  var lightbox = document.getElementById('lightbox');
+  var lightboxMedia = document.getElementById('lightbox-media');
+  var lightboxCaption = document.getElementById('lightbox-caption');
+  var lightboxClose = document.getElementById('lightbox-close');
+  var lastFocused = null;
+
+  function openLightbox(item){
+    lastFocused = document.activeElement;
+    if (item.type === 'video'){
+      var video = document.createElement('video');
+      video.controls = true;
+      video.autoplay = true;
+      video.poster = ph(item.title, item.color, 800, 450);
+      if (item.video){
+        var source = document.createElement('source');
+        source.src = item.video;
+        video.appendChild(source);
+      }
+      lightboxMedia.innerHTML = '';
+      lightboxMedia.appendChild(video);
+      lightboxCaption.innerHTML = item.title + (item.video ? '' :
+        '<br><span class="lightbox-note">Add a video file path to this item\'s `video` field in the code to enable playback.</span>');
+    } else {
+      lightboxMedia.innerHTML = '<img src="' + ph(item.title, item.color, 900, 560) + '" alt="' + item.title + '">';
+      lightboxCaption.textContent = item.title;
+    }
+    lightbox.hidden = false;
+    lightboxClose.focus();
+  }
+
+  function closeLightbox(){
+    lightbox.hidden = true;
+    lightboxMedia.innerHTML = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  panels.gallery.querySelectorAll('.gallery-item').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      openLightbox(galleryItems[Number(btn.dataset.index)]);
+    });
+  });
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e){ if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !lightbox.hidden) closeLightbox();
+  });
+
+  /* ---------------------------------------------------
+     Blog — plain text posts, click a title to read it
+  --------------------------------------------------- */
+  function formatDate(iso){
+    var d = new Date(iso + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  }
+
+  function renderBlogList(){
+    var html = '<div class="post-list">';
+    posts.forEach(function(post, i){
+      html +=
+        '<article class="post-summary">' +
+          '<span class="post-date">' + formatDate(post.date) + '</span>' +
+          '<button class="post-title-btn" data-index="' + i + '">' + post.title + '</button>' +
+          '<p class="post-excerpt">' + post.excerpt + '</p>' +
+        '</article>';
+    });
+    html += '</div>';
+    panels.blog.innerHTML = html;
+    panels.blog.querySelectorAll('.post-title-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){ renderBlogPost(Number(btn.dataset.index)); });
+    });
+  }
+
+  function renderBlogPost(i){
+    var post = posts[i];
+    panels.blog.innerHTML =
+      '<div class="post-full">' +
+        '<button class="back-link">&larr; All posts</button>' +
+        '<span class="post-date">' + formatDate(post.date) + '</span>' +
+        '<h2>' + post.title + '</h2>' +
+        renderMarkdown(post.md) +
+      '</div>';
+    panels.blog.querySelector('.back-link').addEventListener('click', renderBlogList);
+  }
+
+  renderBlogList();
+
+  /* Initial tab on load */
+  selectTab('about');
+})();
+</script>
+</body>
+</html>
