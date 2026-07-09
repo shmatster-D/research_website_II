@@ -179,7 +179,7 @@
 
   function renderGallery(items){
     galleryItems = items;
-    var galleryHtml = '<p class="panel-intro">A tiling of photos and videos — select any tile to enlarge or play it.</p><div class="gallery-grid">';
+    var galleryHtml = '<p class="panel-intro">Photos and videos. Select a tile to enlarge or play it.</p><div class="gallery-grid">';
     items.forEach(function(item, i){
       galleryHtml +=
         '<button class="gallery-item" data-index="' + i + '" aria-label="Open ' + item.title + '">' +

@@ -1,0 +1,3 @@
+Simulations of the turbulent flow of air past turbines are needed to optimize the design of wind power farms. The simulations, however, are computationally expensive and require highly trained scientists to carry out.
+
+In this project, we are investigating the performance of a Fokker-Planck Operator (FPO) constructed by machine learning from Large Eddy Simulations (LES) to predict the statistics of the turbulent flows. We are also looking at the linear interpolation of these operators constructed between different training data sets, enabling the accurate prediction of flow statistics for new configurations that have not been explicitly simulated.
