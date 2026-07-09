@@ -49,7 +49,7 @@ img{ max-width:100%; }
 .profile-header{
   display:flex;
   gap:28px;
-  align-items:flex-start;
+  align-items:center;
   padding:0px 28px 36px 28px;
   margin-bottom:8px;
   /* background-image:
@@ -72,8 +72,8 @@ img{ max-width:100%; }
 .avatar img{ width:100%; height:100%; object-fit:cover; }
 .identity{ flex:1; min-width:300px; }
 .name{ font-family:var(--font-display); font-size:32px; font-weight:600; margin:2px 0 4px; }
-.role{ color:var(--muted); font-size:15px; margin:0 0 18px; }
-.contact-list{ display:flex; flex-direction:column; gap:7px; }
+.role{ color:var(--muted); font-size:15px; margin:0 0 20px; }
+.contact-list{ display:flex; flex-direction:column; gap:7px; margin-top:-16px; }
 .contact-row{ display:flex; gap:12px; align-items:baseline; font-size:14px; }
 .contact-label{
   font-family:var(--font-mono); font-size:11px; letter-spacing:.08em;
